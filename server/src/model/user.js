@@ -1,5 +1,9 @@
 module.exports = (sequelize, DataTypes) =>{
     var User = sequelize.define('users',{
+        id : {
+            type : DataTypes.INTEGER,
+            primaryKey:true
+        },
         username : {
             type : DataTypes.STRING
         },
@@ -12,6 +16,6 @@ module.exports = (sequelize, DataTypes) =>{
     },{
         timestamps : false
     });
-    User.belongsToMany(Course, { as: 'Course', through: { model: Registration, unique: false }, foreignKey: 'user_id' });
+    //User.belongsToMany(Course, { as: 'Course', through: { model: Registration, unique: false }, foreignKey: 'user_id' });
     return User;
 }

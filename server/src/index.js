@@ -1,4 +1,4 @@
-import express from 'express';
+const express =require('express');
 //import 
 
 const app = express();
@@ -17,6 +17,9 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Methods', 'GET,PATCH, PUT,POST');
     next();
   });
+  //////
+  require('./controller/testController')
+  //////
 app.get('/', (req, res) =>
     res.send(`Node and express server is running on port ${PORT}`)
 );
