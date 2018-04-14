@@ -2,7 +2,8 @@ module.exports = (sequelize, DataTypes) =>{
     var Registration = sequelize.define('registrations',{
         id : {
             type : DataTypes.INTEGER,
-            primaryKey:true
+            primaryKey:true,
+            autoIncrement : true,
         },
         student_id : {
             type : DataTypes.INTEGER
