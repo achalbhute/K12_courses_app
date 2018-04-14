@@ -4,18 +4,18 @@ const models = require('./../models');
 const UserController = require('../controllers/userController');
 const controller = new UserController(models.users,null);
 var router  = express.Router();
-
-    router.get('/students', function(req, res){
+/*
+    router.get('/', function(req, res){
         return controller.getStudents()
         .then(result => res.send(result));
     });
     
-    router.get('/student/:id', function(req, res){
+    router.get('/:id', function(req, res){
         const id = req.params.id;
        return controller.getStudent(id)
        .then (result => res.send(result));
     });
-    router.post('/student', function (req, res){
+    router.post('/', function (req, res){
         const student = {
             username: req.body.studentname,
             password : req.body.password || req.body.studentname
@@ -24,11 +24,12 @@ var router  = express.Router();
         .then(result => res.send(result));
     });
 
-    router.delete('/student/:id', function(req, res){
+    router.delete('/:id', function(req, res){
         const id = req.params.id;
         return controller.deleteStudent(id)
         .then(result => res.send(result));
     });
+    */
 
     router.post('/login', function(req, res) {
       var hashedPassword = bcrypt.hashSync(req.body.password, 8);
@@ -40,6 +41,14 @@ var router  = express.Router();
       .then(result => res.send(result));
     });
     
-    
+    router.patch('/changePassword',  function (req, res) {
+      const user ={
+        username : req.body.username,
+        oldPassword : req.body.oldpassword,
+        newpassword : req.body.newpassword
+      }
+      return controller.changePW(user)
+        .then( result => res.send(result));
+    });
 
   module.exports = router;

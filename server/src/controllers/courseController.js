@@ -11,6 +11,10 @@ courseController.prototype = {
         })
             .then(courses => courses);
             },
+    
+    availableCourses : function (){
+
+    },
 
     getCourse : function (id){
         return this.model.findOne({

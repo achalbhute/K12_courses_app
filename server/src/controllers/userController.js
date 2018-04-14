@@ -9,9 +9,8 @@ userController.prototype = {
     getStudents : function (){
         return this.model.findAll({
             where : {role : 'student'}
-        })
-            .then(students => students);
-            },
+        }).then(students => students);
+    },
 
     getStudent : function (id){
         return this.model.findOne({
@@ -47,7 +46,7 @@ userController.prototype = {
             var passwordIsValid = bcrypt.compareSync(user_.password, user.password);
             if (!passwordIsValid) {
                 return { auth: false, token: null }
-            };
+            }
             user.password = "";
             var token = jwt.sign({ id: user.id }, config.secret, {
                 expiresIn: 86400 // expires in 24 hours
@@ -59,6 +58,33 @@ userController.prototype = {
         });
     },
 
+    changePW : function(user){
+        this.oldPWmatch(user)
+        .then(result => {
+        return this.model.update({ "password": user.password }, { where: { username: user.password } })            
+        })
+        .then(message =>{
+            return {
+              success:true,
+              message: 'Successfully updated car entry!'
+            }
+        });
+    },
+
+    oldPWmatch: function(user_){
+        return this.model.findOne({where:{username :user_.username}})
+        .then(function(user) {
+            if(user){
+                var passwordIsValid = (user_.password == user.password);
+                if (!passwordIsValid) {
+                    return { auth: false, token: null }
+                };
+                  return user;
+             }else{
+                return { auth: false, token: null };
+             }
+            });
+    },
     
 }
 module.exports = userController;

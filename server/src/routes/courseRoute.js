@@ -4,7 +4,7 @@ const CourseController = require('../controllers/courseController');
 const controller = new CourseController(models.courses,null, {users: models.users});
 var router  = express.Router();
 
-    router.get('/', function(req, res){
+   /* router.get('/', function(req, res){
         return controller.getCourses()
         .then(result => res.send(result));
     });
@@ -31,5 +31,5 @@ var router  = express.Router();
     });
 
     
-
+*/
   module.exports = router;

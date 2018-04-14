@@ -1,7 +1,11 @@
 const express =require('express');
-const courseRoute = require('./routes/courseRoute');
-const userRoute = require('./routes/userRoute');
-const registrationRoute = require('./routes/registrationRoute');
+// const courseRoute = require('./routes/courseRoute');
+ const userRoute = require('./routes/userRoute');
+// const registrationRoute = require('./routes/registrationRoute');
+
+const adminRoute = require('./routes/adminRoute');
+const studentRoute = require('./routes/studentRoute');
+
 const app = express();
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -24,6 +28,8 @@ app.get('/', (req, res) =>
     res.send(`Node and express server is running on port ${PORT}`)
 );
 
-app.use('/course', courseRoute);
-app.use('/', userRoute);
+app.use('/student', studentRoute);
+app.use('/admin', adminRoute);
+// app.use('/course', courseRoute);
+ app.use('/', userRoute);
 //app.use('/', registrationRoute);
