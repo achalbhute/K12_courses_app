@@ -1,3 +1,4 @@
+//const Op = Sequelize.Op;
 const courseController = function(model, view, dependantModels){
     this.model = model;
     this.view = view;
@@ -12,9 +13,38 @@ courseController.prototype = {
             .then(courses => courses);
             },
     
-    availableCourses : function (){
+    getCoursesAvail : function (){
+       /* return this.availableCourses() 
+        .then ( courses =>{
+        return this.model.findAll({
+            where : {[Op.in] : [courses]},
+           include:[{model:this.dependantModels.users, as:"students"}]
+            })
+            .then(courses => courses);
+        })*/
+        return this.getCourses()
+        .then(courses=>{
+            courses = courses.reduce(function(prev, curr){
+                if(curr.students.length<5){
+                    prev.push(curr);
+                }
+                return prev;
+            },[])
+            return courses;
+        })
+           },
 
-    },
+    // availableCourses : function (){
+    //     return this.model.findAndCountAll({
+    //         attributes: ['course_id'],
+    //         group: ['course_id']
+    //       }).then( result => {
+    //           console.log(result);
+    //         if(result.count <5)
+    //             return result.rows.course_id;
+    //       }
+    // );
+    // },
 
     getCourse : function (id){
         return this.model.findOne({

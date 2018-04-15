@@ -32,10 +32,9 @@ var router  = express.Router();
     */
 
     router.post('/login', function(req, res) {
-      var hashedPassword = bcrypt.hashSync(req.body.password, 8);
       const user_ ={
         username : req.body.username,
-        password : hashedPassword
+        password : req.body.password
       }
       return controller.loginUser(user_)
       .then(result => res.send(result));

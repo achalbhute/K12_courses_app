@@ -1,4 +1,7 @@
 var bcrypt = require('bcryptjs');
+var jwt= require('jsonwebtoken');
+var config    = require(__dirname + '/../../config/config.js');
+
 
 const userController = function(model, view){
     this.model = model;
@@ -19,6 +22,7 @@ userController.prototype = {
     },
 
     postStudent : function (student){
+        console.dir(student);
         return this.model.create(student)
         .then(message => {
             return {
@@ -43,7 +47,10 @@ userController.prototype = {
         where: {username : user_.username}
     }).then(function(user) {
         if(user){
+            console.log(user_.password)
+            console.log(user.password)
             var passwordIsValid = bcrypt.compareSync(user_.password, user.password);
+            console.log(passwordIsValid);
             if (!passwordIsValid) {
                 return { auth: false, token: null }
             }
@@ -59,14 +66,24 @@ userController.prototype = {
     },
 
     changePW : function(user){
-        this.oldPWmatch(user)
+        return this.oldPWmatch(user)
         .then(result => {
-        return this.model.update({ "password": user.password }, { where: { username: user.password } })            
+            if(result.matched)
+                return this.model.update({ "password": user.newpassword }, { where: { username: user.username } })
+            else{
+                return {
+                    success: false,
+                    message: 'Old password didn\'t match'
+                }     
+            }      
         })
         .then(message =>{
+            if(message.success === false){
+                return message;
+            }
             return {
               success:true,
-              message: 'Successfully updated car entry!'
+              message: 'Successfully updated password!'
             }
         });
     },
@@ -75,16 +92,38 @@ userController.prototype = {
         return this.model.findOne({where:{username :user_.username}})
         .then(function(user) {
             if(user){
-                var passwordIsValid = (user_.password == user.password);
+                console.dir(user_);
+                console.dir(user.dataValues);
+                var passwordIsValid = (user_.oldPassword  === user.dataValues.password);
+                console.log(passwordIsValid)
                 if (!passwordIsValid) {
-                    return { auth: false, token: null }
+                    return {matched:false, user: null}; //{ auth: false, token: null }
                 };
-                  return user;
+                  return {matched:true, user: user};
              }else{
-                return { auth: false, token: null };
+                return {matched:false, user: null};  //{ auth: false, token: null };
              }
             });
     },
     
+    checkAuth(req, res, next) {
+
+        var token = req.headers['x-access-token'];
+        if (!token) {
+            return res.send({ auth: false, message: 'No token provided.' });
+        }
+    
+        jwt.verify(token, config.secret, function (err, decoded) {
+            if (err) {
+                return res.send({ auth: false, message: 'Failed to authenticate token.' });
+            }
+            var userID = decoded.id;
+            models.users.findById(userID)
+                .then(function (user) {
+                    res.locals.user = user.dataValues;
+                    next();
+                })
+        });
+    }
 }
 module.exports = userController;

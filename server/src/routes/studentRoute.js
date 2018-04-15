@@ -11,7 +11,7 @@ var router  = express.Router();
 // **************** Course **********
 
 router.get('/courses', function(req, res){
-    return cController.getCourses()
+    return cController.getCoursesAvail()
     .then(result => res.send(result));
 });
 
@@ -26,14 +26,18 @@ router.get('/course/:id', function(req, res){
 router.post('/course/:id',
 function (req, res){
    // res.locals = stduentid
-    return rController.enroll( req.body.studentid, req.params.id)
+   const registration ={
+    course_id : req.params.id,
+    student_id : req.body.student_id
+}
+return rController.enroll( registration)
     .then(result => res.send(result));
 });
 
-router.delete('/course/:id', function(req, res){
+router.delete('/course/:id/leave', function(req, res){
     const registration ={
         course_id : req.params.id,
-        stduent_id : req.body.stduent_id
+        student_id : req.body.student_id
     }
     return rController.remove(registration)
     .then(result => res.send(result));

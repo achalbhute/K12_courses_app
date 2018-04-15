@@ -5,9 +5,10 @@ const registrationController = function(model, view){
 
 registrationController.prototype = {
     enroll : function(registration){
-        this.count(registration.course_id)
+        return this.count(registration.course_id)
         .then(c=> {
             if(c<5){
+                console.dir(registration)
                 return this.model.create({
                     student_id : registration.student_id, course_id : registration.course_id
                 });
@@ -29,7 +30,7 @@ registrationController.prototype = {
 
     count: function(course_id){
         return this.model.findAndCountAll({where:{course_id}})
-        .then(c=>c);
+        .then(c=>c.count);
     },
 
     remove : function (registration){
@@ -38,7 +39,7 @@ registrationController.prototype = {
         }).then(message => {
             return {
                 success : true,
-                message : "Deleted course"
+                message : "Deleted enrollment"
             }
         });
     }

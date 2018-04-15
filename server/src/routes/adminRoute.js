@@ -1,5 +1,6 @@
 const express = require('express');
 const models = require('./../models');
+var bcrypt = require('bcryptjs');
 
 const CourseController = require('../controllers/courseController');
 const cController = new CourseController(models.courses,null, {users: models.users});
@@ -45,14 +46,18 @@ router.delete('/course/:id', function(req, res){
 router.post('/course/:id',
 function (req, res){
     //res.locals = stduentid
-    return rController.enroll( req.body.student_id, req.params.id)
+    const registration ={
+        course_id : req.params.id,
+        student_id : req.body.student_id
+    }
+    return rController.enroll( registration)
     .then(result => res.send(result));
 });
 
-router.delete('/course/:id/remove', function(req, res){
+router.delete('/course/:id/leave', function(req, res){
     const registration ={
         course_id : req.params.id,
-        stduent_id : req.body.student_id
+        student_id : req.body.student_id
     }
     return rController.remove(registration)
     .then(result => res.send(result));
@@ -72,9 +77,14 @@ router.get('/student/:id', function(req, res){
 });
 
 router.post('/students', function (req, res){
+    var password;
+    bcrypt.hash((req.body.password || req.body.studentname), 10, function(err, hash) {
+        this.password= hash;
+        console.log(this.password);
+    });
     const student = {
         username: req.body.studentname,
-        password : req.body.password || req.body.studentname
+        password : this.password
     }
     return sController.postStudent(student)
     .then(result => res.send(result));
