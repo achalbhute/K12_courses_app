@@ -41,13 +41,16 @@ var router  = express.Router();
     });
     
     router.patch('/changePassword',  function (req, res) {
-      const user ={
-        username : req.body.username,
-        oldPassword : req.body.oldpassword,
-        newpassword : req.body.newpassword
-      }
-      return controller.changePW(user)
-        .then( result => res.send(result));
+        bcrypt.hash(req.body.newpassword, 10, function(err, hash) {
+            const password=hash;
+            const user ={
+            username : req.body.username,
+            oldpassword : req.body.oldpassword,
+            newpassword : password
+        }
+        return controller.changePW(user)
+            .then( result => res.send(result));
+        });
     });
 
   module.exports = router;

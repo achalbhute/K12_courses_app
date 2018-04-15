@@ -22,8 +22,7 @@ userController.prototype = {
     },
 
     postStudent : function (student){
-        console.dir(student);
-        return this.model.create(student)
+          return this.model.create(student)
         .then(message => {
             return {
             success : true,
@@ -47,10 +46,7 @@ userController.prototype = {
         where: {username : user_.username}
     }).then(function(user) {
         if(user){
-            console.log(user_.password)
-            console.log(user.password)
             var passwordIsValid = bcrypt.compareSync(user_.password, user.password);
-            console.log(passwordIsValid);
             if (!passwordIsValid) {
                 return { auth: false, token: null }
             }
@@ -92,38 +88,17 @@ userController.prototype = {
         return this.model.findOne({where:{username :user_.username}})
         .then(function(user) {
             if(user){
-                console.dir(user_);
-                console.dir(user.dataValues);
-                var passwordIsValid = (user_.oldPassword  === user.dataValues.password);
-                console.log(passwordIsValid)
+                var passwordIsValid = bcrypt.compareSync(user_.oldpassword, user.password);
                 if (!passwordIsValid) {
-                    return {matched:false, user: null}; //{ auth: false, token: null }
+                    return {matched:false, user: null}; 
                 };
                   return {matched:true, user: user};
              }else{
-                return {matched:false, user: null};  //{ auth: false, token: null };
+                return {matched:false, user: null};  
              }
             });
     },
     
-    checkAuth(req, res, next) {
-
-        var token = req.headers['x-access-token'];
-        if (!token) {
-            return res.send({ auth: false, message: 'No token provided.' });
-        }
     
-        jwt.verify(token, config.secret, function (err, decoded) {
-            if (err) {
-                return res.send({ auth: false, message: 'Failed to authenticate token.' });
-            }
-            var userID = decoded.id;
-            models.users.findById(userID)
-                .then(function (user) {
-                    res.locals.user = user.dataValues;
-                    next();
-                })
-        });
-    }
 }
 module.exports = userController;

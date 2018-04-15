@@ -1,6 +1,8 @@
 const express = require('express');
 const models = require('./../models');
 var bcrypt = require('bcryptjs');
+var jwt= require('jsonwebtoken');
+var config    = require(__dirname + '/../../config/config.js');
 
 const CourseController = require('../controllers/courseController');
 const cController = new CourseController(models.courses,null, {users: models.users});
@@ -13,20 +15,40 @@ const sController = new UserController(models.users,null);
 
 var router  = express.Router();
 
+
+function checkAuth (req, res, next) {
+    var token = req.headers['x-access-token'];
+    if (!token) {
+        return res.send({ auth: false, message: 'No token provided.' });
+    }
+
+    jwt.verify(token, config.secret, function (err, decoded) {
+        if (err) {
+            return res.send({ auth: false, message: 'Failed to authenticate token.' });
+        }
+        var userID = decoded.id;
+        models.users.findById(userID)
+            .then(function (user) {
+                res.locals.user = user.dataValues;
+                next();
+            })
+    });
+}
+
 // ************* Courses ***********
 
-router.get('/courses', function(req, res){
+router.get('/courses', checkAuth, function(req, res){
     return cController.getCourses()
     .then(result => res.send(result));
 });
 
-router.get('/course/:id', function(req, res){
+router.get('/course/:id', checkAuth, function(req, res){
     const id = req.params.id;
    return cController.getCourse(id)
    .then (result => res.send(result));
 });
 
-router.post('/courses', function (req, res){
+router.post('/courses', checkAuth, function (req, res){
     const course = {
         coursename: req.body.coursename,
         details : req.body.details || req.body.coursename
@@ -35,7 +57,7 @@ router.post('/courses', function (req, res){
     .then(result => res.send(result));
 });
 
-router.delete('/course/:id', function(req, res){
+router.delete('/course/:id', checkAuth, function(req, res){
     const id = req.params.id;
     return cController.deleteCourse(id)
     .then(result => res.send(result));
@@ -43,9 +65,7 @@ router.delete('/course/:id', function(req, res){
 
 //******************* Registration *********** */
 
-router.post('/course/:id',
-function (req, res){
-    //res.locals = stduentid
+router.post('/course/:id', checkAuth, function (req, res){
     const registration ={
         course_id : req.params.id,
         student_id : req.body.student_id
@@ -54,7 +74,7 @@ function (req, res){
     .then(result => res.send(result));
 });
 
-router.delete('/course/:id/leave', function(req, res){
+router.delete('/course/:id/leave', checkAuth, function(req, res){
     const registration ={
         course_id : req.params.id,
         student_id : req.body.student_id
@@ -65,35 +85,38 @@ router.delete('/course/:id/leave', function(req, res){
 
 // ***************** User ***********
 
-router.get('/students/', function(req, res){
+router.get('/students/', checkAuth, function(req, res){
     return sController.getStudents()
     .then(result => res.send(result));
 });
 
-router.get('/student/:id', function(req, res){
+router.get('/student/:id', checkAuth, function(req, res){
     const id = req.params.id;
    return sController.getStudent(id)
    .then (result => res.send(result));
 });
 
-router.post('/students', function (req, res){
+router.post('/students', checkAuth, function (req, res){
     var password;
     bcrypt.hash((req.body.password || req.body.studentname), 10, function(err, hash) {
-        this.password= hash;
-        console.log(this.password);
-    });
-    const student = {
+        password= hash;
+        const student = {
         username: req.body.studentname,
-        password : this.password
+        password : password
     }
     return sController.postStudent(student)
     .then(result => res.send(result));
+    });
+    
 });
 
-router.delete('/student/:id', function(req, res){
+router.delete('/student/:id', checkAuth, function(req, res){
     const id = req.params.id;
     return sController.deleteStudent(id)
     .then(result => res.send(result));
 });
+
+
+
 
 module.exports = router;
