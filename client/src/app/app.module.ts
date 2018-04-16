@@ -7,8 +7,14 @@ import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
 import { CourseListComponent } from './course-list/course-list.component';
 import { CourseComponent } from './course/course.component';
-import { AppRoutingModule } from './/app-routing.module';
+import { RouterModule, Routes } from '@angular/router';
+import { UserService } from './services/user.service';
 
+const appRoutes : Routes =[
+  { path : '', component : CourseComponent},
+    { path : 'login', component : LoginComponent}
+    
+];
 
 @NgModule({
   declarations: [
@@ -20,9 +26,11 @@ import { AppRoutingModule } from './/app-routing.module';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    RouterModule.forRoot(
+      appRoutes
+    )
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

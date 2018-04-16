@@ -1,22 +1,26 @@
-<div>
-  <table style="float:center">
-    <tr>
-      <td>
-        Username :
-      </td>
-      <td>
-        <input type = "text"/>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Password :
-      </td>
-      <td>
-        <input type= "text"/>
-      </td>
-    </tr>
-  </table>
-  <button type="submit" > Login </button>
-  <a href="#" > Change Password </a>
-</div>
+<form #myForm="ngForm" novalidate (ngSubmit)="login(myForm)">
+    <div>
+      <h3> Login </h3>
+      <table >
+        <tr>
+          <td>
+            Username :
+          </td>
+          <td>
+            <input type = "text" name="username" ngModel required/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Password :
+          </td>
+          <td>
+            <input type= "password" name="password" ngModel required/>
+          </td>
+        </tr>
+      </table>
+      <button type="submit"> Log in </button>
+      <a routerLink="/course">course</a>
+      <a href="#" > Change Password </a>
+    </div>
+</form>
