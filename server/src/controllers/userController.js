@@ -3,9 +3,10 @@ var jwt= require('jsonwebtoken');
 var config    = require(__dirname + '/../../config/config.js');
 
 
-const userController = function(model, view){
+const userController = function(model, view, dependantModels){
     this.model = model;
     this.view = view;
+    this.dependantModels = dependantModels;
 }
 
 userController.prototype = {
@@ -43,6 +44,7 @@ userController.prototype = {
 
     loginUser : function(user_){
         return this.model.findOne({
+            include:[{model:this.dependantModels.courses, as:"courses"}],
         where: {username : user_.username}
     }).then(function(user) {
         if(user){

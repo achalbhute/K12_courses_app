@@ -2,34 +2,9 @@ const express =require('express');
 var bcrypt = require('bcryptjs');
 const models = require('./../models');
 const UserController = require('../controllers/userController');
-const controller = new UserController(models.users,null);
+const controller = new UserController(models.users,null, {courses:models.courses});
 var router  = express.Router();
-/*
-    router.get('/', function(req, res){
-        return controller.getStudents()
-        .then(result => res.send(result));
-    });
-    
-    router.get('/:id', function(req, res){
-        const id = req.params.id;
-       return controller.getStudent(id)
-       .then (result => res.send(result));
-    });
-    router.post('/', function (req, res){
-        const student = {
-            username: req.body.studentname,
-            password : req.body.password || req.body.studentname
-        }
-        return controller.postStudent(student)
-        .then(result => res.send(result));
-    });
 
-    router.delete('/:id', function(req, res){
-        const id = req.params.id;
-        return controller.deleteStudent(id)
-        .then(result => res.send(result));
-    });
-    */
 
     router.post('/login', function(req, res) {
       const user_ ={

@@ -3,6 +3,7 @@ import {NgForm} from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
     creds['password'] =form.value['password'];
     this.userService.login(creds).subscribe( success => {
       if(localStorage.getItem('token')){
+        this.userService.emitChange({loggedIn:true});
           this.router.navigate(['/']);
       }
       else

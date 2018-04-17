@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
 //import { Observable } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class UserService {
@@ -11,12 +12,12 @@ export class UserService {
     login(creds) {
       let url = this.baseUrl + 'login';
       let headers = new Headers();
-      headers.append('Cntent-Type', 'application/x-www-form-urlencoded');
+      headers.append('Content-Type', 'application/x-www-form-urlencoded');
       let urlSearchParams = new URLSearchParams();
         urlSearchParams.append('username', creds.username);
         urlSearchParams.append('password', creds.password);
         let body = urlSearchParams.toString();
-        return this.http.post(url, body, {
+        return this.http.post('http://localhost:8080/login', body, {
             headers: headers
         })
         .map(res => {
@@ -28,4 +29,15 @@ export class UserService {
             return resp;
         });
     } 
+
+    logOut() {
+      localStorage.clear();
+  }
+  ////////////////////////////
+  //communication
+  private emitChangeSource = new Subject<any>();
+  changeEmitted$ = this.emitChangeSource.asObservable();
+  emitChange(change: any) {
+      this.emitChangeSource.next(change);
+  }
 }

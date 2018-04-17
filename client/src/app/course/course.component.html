@@ -1,3 +1,11 @@
-<p>
-  course works!
-</p>
+<div *ngIf="course">
+    <h3>Course</h3>
+  <ul>
+    <li>Course id : {{course.id}}</li>
+    <li>Name : {{course.coursename}}</li>
+    <li>Details : {{course.details}}</li>
+  </ul>
+  <span *ngIf="showE"> <button class="btn btn-primary btn-sm button" (click)="enroll()">Enroll</button></span>
+  <span *ngIf="showL"><button class="btn btn-primary btn-sm button" (click)="leave()" >Leave</button></span>
+  <button class="btn btn-primary btn-sm button" (click)="Back()" >Back</button>
+  </div>
