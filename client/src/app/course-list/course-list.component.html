@@ -1,12 +1,11 @@
 <section class="container">
   <div class="left-half">
       <div *ngFor="let course of courses" >
-          <a routerLink="./{{course.id}}" routerLinkActive="active">
+          <a routerLink="./{{course.id}}" routerLinkActive="active">{{course.id}}</a>
                 <ul>
                   <li>Name : {{course.coursename}}</li>
                   <li>Details : {{course.details}}</li>
                 </ul>
-          </a>
       </div>
   </div>
   <div class="right-half">

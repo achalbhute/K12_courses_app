@@ -8,7 +8,8 @@ import { Subject } from 'rxjs/Subject';
 export class UserService {
     
   constructor( private http : Http) { }
-    baseUrl : 'http://localhost:8080/';
+    baseUrl = 'http://localhost:8080/';
+
     login(creds) {
       let url = this.baseUrl + 'login';
       let headers = new Headers();
@@ -17,7 +18,7 @@ export class UserService {
         urlSearchParams.append('username', creds.username);
         urlSearchParams.append('password', creds.password);
         let body = urlSearchParams.toString();
-        return this.http.post('http://localhost:8080/login', body, {
+        return this.http.post(url, body, {
             headers: headers
         })
         .map(res => {
@@ -31,7 +32,7 @@ export class UserService {
     } 
 
 
-    changePW(user)
+    changePassword(user)
   {
     let url = this.baseUrl + 'changePassword';
     let headers = new Headers();
@@ -44,6 +45,15 @@ export class UserService {
       return this.http.patch(url,body, {
         headers: headers})
       .map(res => res.json());
+  }
+
+  getStudents(){
+    let url = this.baseUrl + '/admin/students';
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.get(url, {
+          headers: headers})
+        .map(res => res.json());
   }
 
     logOut() {

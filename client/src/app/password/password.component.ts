@@ -15,13 +15,16 @@ export class PasswordComponent implements OnInit {
   ngOnInit() {
   }
 
-  changePW(form : NgForm){
+  changePassword(form : NgForm){
     let user = {};
     user['username'] =form.value['username'];
     user['oldpassword'] =form.value['oldpassword'];
     user['newpassword'] =form.value['newpassword'];
-    this.userService.changePW(user).subscribe(success => {
+    this.userService.changePassword(user).subscribe(success => {
+      if(success.success)
         alert('Password Changed!');
+        else
+        alert('Password not matched');
         this.Back();
     });
 }

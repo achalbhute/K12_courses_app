@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../services/course.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-course',
@@ -14,7 +15,7 @@ export class CourseComponent implements OnInit {
   showStudents : boolean = false;
   students : {};
   course: {};
-  constructor(private route: ActivatedRoute, private router: Router, private courseService: CourseService, private ref: ChangeDetectorRef) {
+  constructor(private route: ActivatedRoute, private router: Router, private courseService: CourseService, private ref: ChangeDetectorRef, private userService : UserService) {
       if (!localStorage.getItem('token')) {
           this.router.navigate(['/login']);
       }
@@ -57,7 +58,14 @@ export class CourseComponent implements OnInit {
     });
 }
 
-    getStudents(){}
+    getStudents(){
+        this.userService.getStudents().subscribe(students => {
+            if(students && students.length >0){
+              this.students = students;
+            }
+          });
+    }
+
 Back() {
   this.router.navigate(['/']);
 }

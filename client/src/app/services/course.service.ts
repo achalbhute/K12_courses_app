@@ -12,10 +12,14 @@ export class CourseService {
     {
       let url = 'http://localhost:8080/';
       let headers = this.makeHeader();
+      let user = JSON.parse(localStorage.getItem('user'));
+      if(user){
+        url = url + user.role + '/courses';
+      }
       if(id){
         url = url + id;
       }
-        return this.http.get('http://localhost:8080/'+id, {
+        return this.http.get(url, {
           headers: headers})
         .map(res => res.json());
     }
@@ -61,8 +65,10 @@ export class CourseService {
       let urlSearchParams = new URLSearchParams();
       urlSearchParams.append('student_id', studentId);
       let body = urlSearchParams.toString()
-        return this.http.delete(url+id+'leave',body, {
-          headers: headers})
+        return this.http.delete(url+'leave',new RequestOptions({
+          headers: headers,
+          body: body
+       }))
         .map(res => res.json());
     }
   
