@@ -11,13 +11,16 @@ import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { UserService } from './services/user.service';
 import { CourseService } from './services/course.service';
+import { PasswordComponent } from '../src/app/password/password.component';
 
 const appRoutes : Routes =[
   { path : '', component : CourseListComponent},
     { path : 'login', component : LoginComponent},
     { path : 'add', component : LoginComponent},
-    { path : ':id', component : CourseComponent}
-    
+    { path : ':id', component : CourseComponent},
+    { path : 'newCourse', component : CourseComponent},
+    { path : 'newStudent', component : CourseComponent},
+    { path : 'changePW', component : PasswordComponent},
 ];
 
 @NgModule({
@@ -26,7 +29,8 @@ const appRoutes : Routes =[
     LoginComponent,
     HeaderComponent,
     CourseListComponent,
-    CourseComponent
+    CourseComponent,
+    PasswordComponent
   ],
   imports: [
     BrowserModule,

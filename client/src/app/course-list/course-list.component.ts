@@ -32,8 +32,12 @@ export class CourseListComponent implements OnInit {
   }
 
   
-  Add(){
-    this.router.navigate(['/add']);
+  AddC(){
+    this.router.navigate(['/newCourse']);
+  }
+
+  AddS(){
+    this.router.navigate(['/newStudent']);
   }
 
 }

@@ -36,7 +36,7 @@ export class CourseService {
   
     enroll(id, studentId)
     {
-      let url = 'http://localhost:8080/';
+      let url = 'http://localhost:8080/course/';
       let headers =  this.makeHeader();
       headers.append('Content-Type', 'application/x-www-form-urlencoded');
       if(id){
@@ -45,7 +45,23 @@ export class CourseService {
       let urlSearchParams = new URLSearchParams();
       urlSearchParams.append('student_id', studentId);
       let body = urlSearchParams.toString()
-        return this.http.patch(url,body, {
+        return this.http.post(url+id,body, {
+          headers: headers})
+        .map(res => res.json());
+    }
+
+    leave(id, studentId)
+    {
+      let url = 'http://localhost:8080/course/';
+      let headers =  this.makeHeader();
+      headers.append('Content-Type', 'application/x-www-form-urlencoded');
+      if(id){
+        url = url + id;
+      }
+      let urlSearchParams = new URLSearchParams();
+      urlSearchParams.append('student_id', studentId);
+      let body = urlSearchParams.toString()
+        return this.http.delete(url+id+'leave',body, {
           headers: headers})
         .map(res => res.json());
     }

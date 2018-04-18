@@ -5,6 +5,13 @@
     <li>Name : {{course.coursename}}</li>
     <li>Details : {{course.details}}</li>
   </ul>
+  <span *ngIf="showStudents"> 
+      <select name="student" ngModel>
+          <option *ngFor="let student of students" [ngValue]="student">
+              {{ student.username }}
+          </option>
+      </select> 
+  </span>
   <span *ngIf="showE"> <button class="btn btn-primary btn-sm button" (click)="enroll()">Enroll</button></span>
   <span *ngIf="showL"><button class="btn btn-primary btn-sm button" (click)="leave()" >Leave</button></span>
   <button class="btn btn-primary btn-sm button" (click)="Back()" >Back</button>

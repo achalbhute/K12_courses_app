@@ -30,6 +30,22 @@ export class UserService {
         });
     } 
 
+
+    changePW(user)
+  {
+    let url = this.baseUrl + 'changePassword';
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    let urlSearchParams = new URLSearchParams();
+    urlSearchParams.append('username', user.username);
+    urlSearchParams.append('oldpassword', user.oldpassword);
+    urlSearchParams.append('newpassword', user.newpassword);
+    let body = urlSearchParams.toString()
+      return this.http.patch(url,body, {
+        headers: headers})
+      .map(res => res.json());
+  }
+
     logOut() {
       localStorage.clear();
   }

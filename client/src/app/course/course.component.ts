@@ -11,6 +11,8 @@ export class CourseComponent implements OnInit {
 
   showE: boolean = true;
   showL : boolean = false;
+  showStudents : boolean = false;
+  students : {};
   course: {};
   constructor(private route: ActivatedRoute, private router: Router, private courseService: CourseService, private ref: ChangeDetectorRef) {
       if (!localStorage.getItem('token')) {
@@ -27,6 +29,10 @@ export class CourseComponent implements OnInit {
           this.showE = false;
           this.showL = true;
       }
+      if (user && user.role == 'admin') {
+        this.showStudents = true;
+        this.getStudents();
+    }
 
   }
 
@@ -50,6 +56,8 @@ export class CourseComponent implements OnInit {
         this.Back();
     });
 }
+
+    getStudents(){}
 Back() {
   this.router.navigate(['/']);
 }

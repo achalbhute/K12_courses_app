@@ -1,10 +1,19 @@
-<div *ngFor="let course of courses" >
-    <a routerLink="./{{course.id}}" routerLinkActive="active">
-          <ul>
-            <li>Name : {{course.coursename}}</li>
-            <li>Details : {{course.details}}</li>
-          </ul>
-        </a>
-        <hr>
-    </div>
-    <span *ngIf="show"><button class="btn btn-primary btn-sm button"  (click)="Add()" >Add Course</button></span>
+<section class="container">
+  <div class="left-half">
+      <div *ngFor="let course of courses" >
+          <a routerLink="./{{course.id}}" routerLinkActive="active">
+                <ul>
+                  <li>Name : {{course.coursename}}</li>
+                  <li>Details : {{course.details}}</li>
+                </ul>
+          </a>
+      </div>
+  </div>
+  <div class="right-half">
+    <span *ngIf="show">
+      <button class="btn btn-primary btn-sm button"  (click)="AddC()" >Add Course</button>
+      <button class="btn btn-primary btn-sm button"  (click)="ViewS()" >View Students</button>
+      <button class="btn btn-primary btn-sm button"  (click)="AddS()" >Add Student</button>
+    </span>
+  </div>
+</section>
