@@ -48,7 +48,7 @@ export class UserService {
   }
 
   getStudents(){
-    let url = this.baseUrl + '/admin/students';
+    let url = this.baseUrl + 'admin/students';
     let headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.get(url, {

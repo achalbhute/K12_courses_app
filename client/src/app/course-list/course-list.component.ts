@@ -31,7 +31,10 @@ export class CourseListComponent implements OnInit {
   ngOnInit() {
   }
 
-  
+  ViewS(){
+    this.router.navigate(['/students']);
+  }
+
   AddC(){
     this.router.navigate(['/newCourse']);
   }

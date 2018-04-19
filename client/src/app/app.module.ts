@@ -12,12 +12,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserService } from './services/user.service';
 import { CourseService } from './services/course.service';
 import { PasswordComponent} from './password/password.component';
+import { StudentListComponent } from './student-list/student-list.component';
+import { StudentComponent } from './student/student.component';
 
 const appRoutes : Routes =[
   { path : '', component : CourseListComponent},
     { path : 'login', component : LoginComponent},
     { path : 'changePassword', component : PasswordComponent},
     { path : ':id', component : CourseComponent},
+  { path : 'students', component : StudentListComponent},
+    
     // { path : 'add', component : LoginComponent},
     // { path : 'newCourse', component : CourseComponent},
     // { path : 'newStudent', component : CourseComponent},
@@ -31,7 +35,9 @@ const appRoutes : Routes =[
     HeaderComponent,
     CourseListComponent,
     CourseComponent,
-    PasswordComponent
+    PasswordComponent,
+    StudentListComponent,
+    StudentComponent
   ],
   imports: [
     BrowserModule,

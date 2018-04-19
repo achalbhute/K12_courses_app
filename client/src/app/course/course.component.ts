@@ -26,14 +26,15 @@ export class CourseComponent implements OnInit {
       });
 
       let user = JSON.parse(localStorage.getItem('user'));
-      if (user && user.courses.id == id) {
+     if (user && user.role == 'admin') {
+        this.showStudents = true;
+        this.getStudents();
+    } else 
+      if (user && user.courses[0].id == id) {
           this.showE = false;
           this.showL = true;
       }
-      if (user && user.role == 'admin') {
-        this.showStudents = true;
-        this.getStudents();
-    }
+     
 
   }
 
@@ -45,16 +46,16 @@ export class CourseComponent implements OnInit {
       let user = JSON.parse(localStorage.getItem('user'));
       this.courseService.enroll(id, user.id).subscribe(success => {
           alert('Course Enrolled');
-          this.Back();
+          this.router.navigate(['/']);
       });
   }
 
   leave() {
     let id = this.route.snapshot.paramMap.get('id');
     let user = JSON.parse(localStorage.getItem('user'));
-    this.courseService.enroll(id, user.id).subscribe(success => {
+    this.courseService.leave(id, user.id).subscribe(success => {
         alert('Course leaved');
-        this.Back();
+        this.router.navigate(['/']);
     });
 }
 
